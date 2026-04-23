@@ -1,0 +1,581 @@
+/* ============================================================================
+   assets/style.css  —  Shared Design System for AR Assembly Tracker
+   ============================================================================ */
+
+/* ── Google Font ─────────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ── Design Tokens ───────────────────────────────────────────────────────── */
+:root {
+    --accent:        #00ff88;
+    --accent-dim:    #00cc6a;
+    --accent-glow:   rgba(0, 255, 136, 0.25);
+    --danger:        #ff5555;
+    --warn:          #ffaa00;
+
+    --bg-base:       transparent;
+    --bg-glass:      rgba(0, 0, 0, 0.4);
+    --bg-panel:      rgba(0, 8, 4, 0.5);
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-accent: rgba(0, 255, 136, 0.4);
+
+    --text-primary:  #ffffff;
+    --text-muted:    #8899aa;
+    --text-code:     #aaccbb;
+
+    --radius-sm:  8px;
+    --radius-md:  12px;
+    --radius-lg:  20px;
+    --radius-xl:  28px;
+
+    --shadow-panel:  0 8px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--border-accent);
+    --shadow-glow:   0 0 30px var(--accent-glow);
+
+    --transition:    0.2s ease;
+
+    --font: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* ── Reset ───────────────────────────────────────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+    height: 100%;
+    font-family: var(--font);
+    background: var(--bg-base);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   LOGIN PAGE
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Full-screen animated background for login */
+.login-bg {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    background: radial-gradient(ellipse at 30% 50%, rgba(0,255,136,0.06) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 20%, rgba(0,180,255,0.04) 0%, transparent 50%),
+                #000;
+}
+
+/* Animated grid lines behind the login card */
+.login-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(0,255,136,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,255,136,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    animation: gridPan 20s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes gridPan {
+    from { background-position: 0 0; }
+    to   { background-position: 40px 40px; }
+}
+
+/* Glowing orb decorations */
+.orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+}
+.orb-1 { width: 400px; height: 400px; background: rgba(0,255,136,0.12); top: -100px; left: -100px; animation: orbFloat 8s ease-in-out infinite; }
+.orb-2 { width: 300px; height: 300px; background: rgba(0,150,255,0.08); bottom: -80px; right: -80px; animation: orbFloat 10s ease-in-out infinite reverse; }
+
+@keyframes orbFloat {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50%       { transform: translateY(-30px) scale(1.05); }
+}
+
+/* Login card */
+.login-card {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 420px;
+    background: var(--bg-panel);
+    border: 1px solid var(--border-accent);
+    border-radius: var(--radius-xl);
+    padding: 48px 40px;
+    box-shadow: var(--shadow-panel), var(--shadow-glow);
+    backdrop-filter: blur(20px);
+    animation: cardIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes cardIn {
+    from { opacity: 0; transform: translateY(30px) scale(0.95); }
+    to   { opacity: 1; transform: none; }
+}
+
+/* Brand header */
+.login-brand {
+    text-align: center;
+    margin-bottom: 36px;
+}
+.login-logo {
+    width: 64px; height: 64px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-dim));
+    border-radius: var(--radius-md);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+    margin: 0 auto 16px;
+    box-shadow: 0 0 30px var(--accent-glow);
+    animation: logoPulse 3s ease-in-out infinite;
+}
+@keyframes logoPulse {
+    0%, 100% { box-shadow: 0 0 20px var(--accent-glow); }
+    50%       { box-shadow: 0 0 40px rgba(0,255,136,0.4); }
+}
+.login-brand h1 {
+    font-size: 22px; font-weight: 700; color: var(--text-primary);
+    letter-spacing: -0.5px;
+}
+.login-brand p { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+
+/* Form elements */
+.form-group { margin-bottom: 20px; }
+
+.form-label {
+    display: block;
+    font-size: 12px; font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.8px;
+    margin-bottom: 8px;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex; align-items: center;
+}
+
+.input-icon {
+    position: absolute; left: 14px;
+    font-size: 16px; pointer-events: none;
+    opacity: 0.5;
+}
+
+.form-input {
+    width: 100%;
+    padding: 14px 14px 14px 42px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    font-family: var(--font); font-size: 15px;
+    outline: none;
+    transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+}
+.form-input::placeholder { color: rgba(255,255,255,0.2); }
+.form-input:focus {
+    border-color: var(--accent);
+    background: rgba(0,255,136,0.04);
+    box-shadow: 0 0 0 3px rgba(0,255,136,0.12);
+}
+
+/* Error banner */
+.login-error {
+    display: none;
+    background: rgba(255, 85, 85, 0.1);
+    border: 1px solid rgba(255, 85, 85, 0.3);
+    color: var(--danger);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    font-size: 13px;
+    margin-bottom: 18px;
+    animation: slideDown 0.2s ease;
+}
+@keyframes slideDown { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:none; } }
+
+/* Submit button */
+.login-btn {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-dim));
+    color: #000;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: var(--font); font-size: 15px; font-weight: 700;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: opacity var(--transition), transform var(--transition), box-shadow var(--transition);
+    letter-spacing: 0.3px;
+}
+.login-btn:hover:not(:disabled) {
+    opacity: 0.9;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(0,255,136,0.35);
+}
+.login-btn:active:not(:disabled) { transform: translateY(0); }
+.login-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* Button spinner */
+.btn-spinner {
+    display: none;
+    width: 16px; height: 16px;
+    border: 2px solid rgba(0,0,0,0.3);
+    border-top-color: #000;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Form shake on error */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60%  { transform: translateX(-8px); }
+    40%, 80%  { transform: translateX(8px); }
+}
+.shake { animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97); }
+
+/* Login footer */
+.login-footer {
+    text-align: center; margin-top: 24px;
+    font-size: 11px; color: var(--text-muted);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DASHBOARD PAGE
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.camera-container {
+    position: relative;
+    width: 100vw; height: 100vh;
+    overflow: hidden;
+}
+
+#video {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    /* transform applied dynamically by qrController.js */
+}
+
+/* ── Scanner overlay ─────────────────────────────────────────────────────── */
+/* Size uses 60vmin to match qrController.js scan zone (60% of shortest dim) */
+/* Scanner styles removed as per request */
+.scanner-overlay, .scanner-line, .scanner-label {
+    display: none !important;
+}
+
+/* ── Status overlay (top-left) ───────────────────────────────────────────── */
+.status-overlay {
+    position: absolute; top: 20px; left: 20px;
+    background: var(--bg-glass);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    padding: 16px 20px;
+    border-radius: var(--radius-md);
+    z-index: 20; max-width: 260px;
+    backdrop-filter: blur(12px);
+    font-size: 13px;
+}
+.status-overlay h1 { font-size: 16px; font-weight: 700; margin-bottom: 10px; color: var(--text-primary); }
+.status-row { display: flex; gap: 6px; margin-top: 5px; align-items: center; }
+.status-row .label { color: var(--text-muted); }
+.status-row .value { color: var(--accent); font-weight: 600; }
+.status-row .value.white { color: var(--text-primary); }
+
+.user-row {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 12px; padding-top: 12px;
+    border-top: 1px solid var(--border-subtle);
+}
+.user-id { font-size: 12px; color: var(--text-muted); }
+
+.logout-btn {
+    background: rgba(255,85,85,0.15);
+    border: 1px solid rgba(255,85,85,0.3);
+    color: var(--danger);
+    padding: 5px 12px; border-radius: 20px;
+    font-size: 11px; font-weight: 600; font-family: var(--font);
+    cursor: pointer;
+    transition: background var(--transition), border-color var(--transition);
+}
+.logout-btn:hover {
+    background: rgba(255,85,85,0.25);
+    border-color: rgba(255,85,85,0.5);
+}
+
+/* ── KPI panel (top-right) ───────────────────────────────────────────────── */
+.kpi-panel {
+    position: absolute; top: 20px; right: 20px;
+    width: 340px; max-height: calc(100vh - 40px);
+    background: var(--bg-panel);
+    border: 1px solid var(--border-accent);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    z-index: 30;
+    box-shadow: var(--shadow-panel);
+    display: none;
+    overflow-y: auto;
+    animation: panelIn 0.25s ease;
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent-dim) transparent;
+}
+.kpi-panel.active { display: block; }
+
+@keyframes panelIn { from { opacity:0; transform: translateX(20px); } to { opacity:1; transform:none; } }
+
+.panel-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 16px; padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-subtle);
+}
+.panel-header h2 { color: var(--accent); font-size: 16px; font-weight: 700; }
+.close-btn {
+    background: rgba(255,255,255,0.06); border: none;
+    color: var(--text-muted); font-size: 20px;
+    cursor: pointer; width: 30px; height: 30px;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    transition: background var(--transition), color var(--transition);
+}
+.close-btn:hover { background: rgba(255,255,255,0.12); color: white; }
+
+.machine-name { color: var(--accent); font-size: 15px; font-weight: 700; margin-bottom: 10px; }
+
+.kpi-section {
+    margin-top: 16px; padding-top: 14px;
+    border-top: 1px solid var(--border-subtle);
+}
+.section-title { color: var(--text-muted); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+
+.kpi-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.kpi-item:last-child { border-bottom: none; }
+.kpi-label { color: var(--text-muted); font-size: 13px; }
+.kpi-value { color: var(--text-primary); font-size: 13px; font-weight: 600; }
+.status-ok { color: var(--accent) !important; }
+
+.no-kpi-msg {
+    color: var(--warn); font-size: 12px; line-height: 1.6; margin-top: 8px;
+}
+.no-kpi-msg code { color: var(--text-code); }
+
+/* Error panel content */
+.error-panel-content { text-align: center; padding: 20px 0; }
+.error-icon { font-size: 40px; margin-bottom: 12px; }
+.error-panel-content h3 { color: var(--danger); margin-bottom: 8px; }
+.error-panel-content p { font-size: 13px; color: var(--text-muted); }
+.hint { font-size: 11px; margin-top: 12px; word-break: break-all; }
+
+/* ── Loading screen ──────────────────────────────────────────────────────── */
+.loading-screen {
+    position: absolute; inset: 0;
+    background: var(--bg-base); color: var(--text-primary);
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    z-index: 100; gap: 20px;
+}
+.loader {
+    width: 52px; height: 52px;
+    border: 3px solid rgba(255,255,255,0.08);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+}
+.loading-screen h2 { font-size: 18px; font-weight: 600; }
+.loading-screen p  { color: var(--text-muted); font-size: 14px; }
+
+/* ── Error screen ────────────────────────────────────────────────────────── */
+.error-screen {
+    position: absolute; inset: 0;
+    background: var(--bg-base); color: var(--text-primary);
+    display: none; flex-direction: column;
+    justify-content: center; align-items: center;
+    z-index: 100; padding: 40px; gap: 16px; text-align: center;
+}
+.error-screen h2 { color: var(--danger); font-size: 24px; }
+.error-screen p  { color: var(--text-muted); max-width: 400px; }
+
+.retry-btn {
+    background: var(--accent); color: #000;
+    border: none; padding: 12px 28px;
+    border-radius: var(--radius-sm); font-family: var(--font);
+    font-size: 14px; font-weight: 700; cursor: pointer;
+    transition: opacity var(--transition);
+}
+.retry-btn:hover { opacity: 0.85; }
+
+/* ── Debug panel (bottom-left) ───────────────────────────────────────────── */
+.debug-panel {
+    position: absolute; bottom: 70px; left: 20px;
+    background: var(--bg-glass);
+    border: 1px solid var(--warn);
+    color: var(--text-primary);
+    padding: 14px; border-radius: var(--radius-sm);
+    z-index: 25; max-width: 420px; max-height: 200px;
+    overflow-y: auto; font-size: 11px;
+    display: none; font-family: 'Courier New', monospace;
+    backdrop-filter: blur(10px);
+}
+.debug-panel.active { display: block; }
+.debug-panel h3 { color: var(--warn); margin-bottom: 8px; font-size: 12px; }
+
+/* ── Debug toggle button ─────────────────────────────────────────────────── */
+.debug-toggle {
+    position: absolute; bottom: 20px; right: 20px;
+    background: var(--bg-glass); color: var(--text-muted);
+    border: 1px solid var(--border-subtle);
+    padding: 8px 16px; border-radius: 20px;
+    cursor: pointer; z-index: 25;
+    font-size: 12px; font-family: var(--font);
+    backdrop-filter: blur(10px);
+    transition: border-color var(--transition), color var(--transition);
+}
+.debug-toggle:hover { border-color: var(--warn); color: var(--warn); }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MOBILE & TOUCH — responsive tweaks for phones, tablets, VR headsets
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Respect notch / home indicator safe areas on iPhones and Android */
+@supports (padding: env(safe-area-inset-top)) {
+    .status-overlay {
+        top:  max(20px, env(safe-area-inset-top));
+        left: max(20px, env(safe-area-inset-left));
+    }
+    .kpi-panel {
+        top:   max(20px, env(safe-area-inset-top));
+        right: max(20px, env(safe-area-inset-right));
+    }
+    .debug-toggle {
+        bottom: max(20px, env(safe-area-inset-bottom));
+        right:  max(20px, env(safe-area-inset-right));
+    }
+    .debug-panel {
+        bottom: max(70px, calc(env(safe-area-inset-bottom) + 50px));
+    }
+}
+
+/* ── Small phone (portrait, < 480 px wide) ───────────────────────────────── */
+@media (max-width: 480px) {
+
+    /* Status panel: narrower, smaller text */
+    .status-overlay {
+        max-width: calc(100vw - 40px);
+        padding: 10px 14px;
+        font-size: 11px;
+    }
+    .status-overlay h1 { font-size: 13px; margin-bottom: 6px; }
+
+    /* KPI panel remains on the right as per request */
+    .kpi-panel {
+        top: 10px;
+        right: 10px;
+        width: 280px;
+        max-height: 80vh;
+    }
+
+
+    /* Bigger close button for touch */
+    .close-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 22px;
+    }
+
+    /* Bigger logout button */
+    .logout-btn {
+        padding: 8px 16px;
+        font-size: 13px;
+    }
+
+    /* Scanner overlay — responsive on mobile too */
+    .scanner-overlay {
+        width:  min(55vmin, 280px);
+        height: min(55vmin, 280px);
+    }
+
+    /* Debug panel — full width on mobile */
+    .debug-panel {
+        left: 10px;
+        right: 10px;
+        max-width: none;
+        bottom: 80px;
+    }
+
+    /* Debug toggle */
+    .debug-toggle {
+        bottom: 20px;
+        right:  10px;
+        padding: 10px 18px;
+        font-size: 13px;
+    }
+
+    /* Error screen text */
+    .error-screen p { font-size: 13px; white-space: pre-line; }
+    .retry-btn { padding: 14px 36px; font-size: 15px; }
+}
+
+/* ── Medium phone / small tablet (480–768 px) ─────────────────────────────── */
+@media (min-width: 481px) and (max-width: 768px) {
+    .kpi-panel {
+        width: 320px;
+        max-height: calc(100vh - 40px);
+    }
+    .status-overlay { max-width: 220px; }
+}
+
+/* ── Landscape mobile — panel takes full height on short screens ──────────── */
+@media (max-height: 500px) and (orientation: landscape) {
+    .kpi-panel {
+        top: 10px;
+        max-height: calc(100vh - 20px);
+        overflow-y: auto;
+    }
+    .status-overlay {
+        top: 10px;
+        left: 10px;
+        padding: 8px 12px;
+        font-size: 11px;
+    }
+    .status-overlay h1 { font-size: 12px; }
+}
+
+/* ── Touch devices — larger tap targets ──────────────────────────────────── */
+@media (pointer: coarse) {
+    .close-btn,
+    .logout-btn,
+    .debug-toggle,
+    .retry-btn,
+    .login-btn {
+        min-height: 44px; /* Apple HIG minimum tap target */
+        min-width:  44px;
+    }
+    .form-input {
+        padding: 16px 16px 16px 46px;
+        font-size: 16px; /* Prevents iOS zoom-on-focus */
+    }
+    .kpi-item { padding: 12px 0; }
+}
+
+/* ── VR / XR headsets — high contrast, larger text ──────────────────────── */
+@media (min-width: 1920px) and (min-height: 1080px) {
+    .status-overlay {
+        font-size: 16px;
+        max-width: 340px;
+        padding: 22px 26px;
+    }
+    .status-overlay h1 { font-size: 20px; }
+    .kpi-panel {
+        width: 420px;
+        font-size: 16px;
+    }
+    .kpi-label, .kpi-value { font-size: 16px; }
+    /* Scanner styles removed */
+    .scanner-label { font-size: 18px; top: -48px; }
+    .debug-toggle  { font-size: 15px; padding: 12px 22px; }
+}

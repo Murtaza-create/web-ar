@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Login — AR Assembly Tracker</title>
+    <meta name="description" content="Secure login to the AR Assembly Line industrial dashboard.">
+    <!-- Shared styles -->
+    <link rel="stylesheet" href="assets/style.css">
+    <!-- Supabase CDN (must load before our models) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="models/supabasemodel.js"></script>
+    <script src="models/authmodel.js"></script>
+    <!-- Controller -->
+    <script src="controllers/authcontroller.js"></script>
+</head>
+<body>
+
+    <!-- Animated background -->
+    <div class="login-bg">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+
+        <!-- Login card -->
+        <div class="login-card">
+
+            <!-- Brand -->
+            <div class="login-brand">
+                <div class="login-logo">🏭</div>
+                <h1>AR Assembly Tracker</h1>
+                <p>Industrial QR Dashboard — Secure Access</p>
+            </div>
+
+            <!-- Error banner -->
+            <div class="login-error" id="login-error" role="alert" aria-live="polite"></div>
+
+            <!-- Login form -->
+            <form id="login-form" novalidate>
+
+                <!-- ID field -->
+                <div class="form-group">
+                    <label class="form-label" for="login-id">User ID</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">🪪</span>
+                        <input
+                            type="text"
+                            id="login-id"
+                            class="form-input"
+                            placeholder="Enter your ID"
+                            autocomplete="username"
+                            required
+                        >
+                    </div>
+                </div>
+
+                <!-- Password field -->
+                <div class="form-group">
+                    <label class="form-label" for="login-password">Password</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">🔐</span>
+                        <input
+                            type="password"
+                            id="login-password"
+                            class="form-input"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required
+                        >
+                    </div>
+                </div>
+
+                <!-- Submit -->
+                <button type="submit" class="login-btn" id="login-submit">
+                    <span class="btn-spinner" id="btn-spinner"></span>
+                    <span id="btn-text">Login</span>
+                </button>
+
+            </form>
+
+            <!-- Footer -->
+            <div class="login-footer">
+                <p>🔒 Secured by Supabase &nbsp;|&nbsp; AR Assembly Tracker v2.0</p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Init: runs after all scripts are loaded -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            window.AuthController.initLoginPage();
+        });
+    </script>
+
+</body>
+</html>

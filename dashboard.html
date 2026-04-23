@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#000000">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Dashboard — AR Assembly Tracker</title>
+    <meta name="description" content="Real-time AR industrial QR dashboard. Scan machine QR codes to view live KPI data.">
+    <!-- Shared styles -->
+    <link rel="stylesheet" href="assets/style.css">
+
+    <!-- ── External Libraries ──────────────────────────────────────────────── -->
+    <!-- jsQR: QR decoding from canvas pixels -->
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+    <!-- Supabase JS client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- ── Models (load first — no dependencies on controllers) ─────────────── -->
+    <script src="models/supabasemodel.js"></script>
+    <script src="models/authmodel.js"></script>
+    <script src="models/machinemodel.js"></script>
+
+    <!-- ── Controllers (depend on models) ───────────────────────────────────── -->
+    <script src="controllers/authcontroller.js"></script>
+    <script src="controllers/qrcontroller.js"></script>
+    <script src="controllers/dashboardcontroller.js"></script>
+</head>
+<body>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         LOADING SCREEN — shown while connecting to Supabase and starting cam
+         ══════════════════════════════════════════════════════════════════════ -->
+    <div class="loading-screen" id="loading-screen">
+        <div class="loader"></div>
+        <h2 id="loading-title">AR Assembly Tracker</h2>
+        <p id="loading-message">Initialising…</p>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         ERROR SCREEN — shown when camera or Supabase fails to load
+         ══════════════════════════════════════════════════════════════════════ -->
+    <div class="error-screen" id="error-screen">
+        <h2>⚠️ Error</h2>
+        <p id="error-message"></p>
+        <button class="retry-btn" onclick="retryConnection()">Retry</button>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         CAMERA CONTAINER — holds video feed + all overlaid UI panels
+         ══════════════════════════════════════════════════════════════════════ -->
+    <div class="camera-container" id="camera-container" style="display: none;">
+
+        <!-- Live camera feed; transform applied by qrController.js -->
+        <video id="video" autoplay playsinline webkit-playsinline muted></video>
+
+        <!-- Hidden canvas used by jsQR for pixel analysis -->
+        <canvas id="canvas" style="display: none;"></canvas>
+
+        <!-- Scanner box overlay removed as per request -->
+
+
+        <!-- ── Status overlay (top-left) ──────────────────────────────────── -->
+        <div class="status-overlay">
+            <h1>🏭 AR Assembly Tracker</h1>
+            <div class="status-row">
+                <span class="label">📊 Source:</span>
+                <span class="value" id="data-source">Supabase</span>
+            </div>
+            <div class="status-row">
+                <span class="label">✅ Machines:</span>
+                <span class="value white" id="machine-count">0</span>
+            </div>
+            <div class="status-row">
+                <span class="label">🔍 Scanned:</span>
+                <span class="value white" id="detection-count">0</span>
+            </div>
+
+            <!-- Logged-in user + logout button -->
+            <div class="user-row">
+                <span class="user-id" id="user-greeting">Guest</span>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+        </div>
+
+        <!-- ── KPI side panel (top-right) ─────────────────────────────────── -->
+        <div class="kpi-panel" id="kpi-panel">
+            <div class="panel-header">
+                <h2 id="panel-title">Machine Details</h2>
+                <button class="close-btn" onclick="hidePanel()" aria-label="Close panel">×</button>
+            </div>
+            <!-- Dynamic content injected by dashboardController.js -->
+            <div id="panel-content"></div>
+        </div>
+
+        <!-- ── Debug log panel (bottom-left) ──────────────────────────────── -->
+        <div class="debug-panel" id="debug-panel">
+            <h3>🐛 Debug Log</h3>
+            <div id="debug-log"></div>
+        </div>
+
+        <!-- Debug toggle button -->
+        <button class="debug-toggle" onclick="toggleDebug()">🐛 Debug</button>
+
+    </div><!-- end .camera-container -->
+
+    <!-- ── Bootstrap the dashboard ─────────────────────────────────────────── -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            window.DashboardController.init();
+        });
+    </script>
+
+</body>
+</html>

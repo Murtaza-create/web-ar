@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AR Assembly Tracker</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: system-ui, sans-serif;
+            background: #000;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <p>Redirecting…</p>
+    <script>
+        /**
+         * index.html — Entry point redirect
+         * ─────────────────────────────────────────────────────────────────────
+         * Checks for an existing session in localStorage.
+         *  → Session found  → go to dashboard.html
+         *  → No session     → go to login.html
+         *
+         * NOTE: All paths are lowercase to match Linux/Vercel file casing.
+         */
+        (function () {
+            const SESSION_KEY = 'ar_session';
+            let destination   = 'login.html'; // lowercase — matches filename on Vercel (Linux)
+
+            try {
+                const raw = localStorage.getItem(SESSION_KEY);
+                if (raw) {
+                    const session = JSON.parse(raw);
+                    if (session && session.user) {
+                        destination = 'dashboard.html';
+                    }
+                }
+            } catch (e) {
+                // Malformed session — send to login
+            }
+
+            window.location.replace(destination);
+        })();
+    </script>
+</body>
+</html>
